@@ -6,7 +6,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/githubpages/',
+  base: '/',
   server: {
     https: {
       key: fs.readFileSync(path.resolve(__dirname, 'localhost-key.pem')),
