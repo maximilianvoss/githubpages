@@ -1,23 +1,63 @@
 {
-  "name": "github-pages-react-app",
+  "name": "universal-editor-sample-app",
   "version": "1.0.0",
+  "private": true,
+  "description": "Adobe Universal Editor Sample App",
+  "author": "Adobe",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/adobe/universal-editor-sample-app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adobe/universal-editor-sample-app.git"
+  },
+  "keywords": [
+    "adobe",
+    "universal-editor",
+    "sample-app"
+  ],
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.9.6",
+    "sass": "^1.94.1"
   },
   "devDependencies": {
+    "@adobe/aem-headless-client-js": "^4.0.0",
+    "@adobe/aem-headless-client-nodejs": "^2.0.0",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-basic-ssl": "^2.1.0",
     "@vitejs/plugin-react": "^4.2.1",
     "gh-pages": "^6.1.0",
+    "react-helmet-async": "^2.0.4",
     "vite": "^5.0.8"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
-

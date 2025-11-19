@@ -1,129 +1,72 @@
-# React App - GitHub Pages
+# Adobe Universal Editor Sample App
 
-A modern React application built with Vite, ready to be deployed to GitHub Pages.
+## Using the Sample App
+The Sample App is hosted at https://ue-remote-app.adobe.net.
+Per Default the content is retrieved and written back to the Adobe Experience Manager as a Cloud Service ( Production ) Demo Environment:
 
-## 🚀 Getting Started
+The default settings from [.env](.env) can be overwritten using Query parameters:
+* `authorHost`: host to retrieve data from and update content to; default=https://author-p7452-e12433.adobeaemcloud.com
+* `service`: Universal Editor Service endpoint; default Universal Editor default
+* `protocol`: protocol to use with backend, can be `aem`, `aem65`, `aemcsLegacy`; default: `aem`
+* `cors`: defining which cors.js - connection between Universal Editor and application shall be used. Can be `stage` or empty; default `null/empty`. `stage` will use the cors library hosted on stage, else it will use the production version
 
-### Prerequisites
+To retrieve content from another environment add `authorHost` as query parameters, e.g.
 
-- Node.js (v14 or higher)
-- npm or yarn
-- Git
+[https://ue-remote-app.adobe.net?authorHost=https://author-p7452-e12433.adobeaemcloud.com](https://ue-remote-app.adobe.net?authorHost=https://author-p7452-e12433.adobeaemcloud.com)
 
-### Installation
+Similarly, if running the Universal Editor App on local dev environment, add `authorHost` as query parameters like this:
 
-1. Clone this repository:
-```bash
-git clone <your-repo-url>
-cd github-pages
-```
+[https://localhost:3000?authorHost=https://localhost:8443&service=https://localhost:8443/universal-editor](https://localhost:3000?authorHost=https://localhost:8443&service=https://localhost:8443/universal-editor)
 
-2. Install dependencies:
-```bash
-npm install
-```
+## Run locally 
 
-3. Start the development server:
-```bash
-npm run dev
-```
+- AEM 6.5 or AEMCS instance
+- Latest WKND Content installed on the AEM instance[https://github.com/adobe/aem-guides-wknd/releases/latest](https://github.com/adobe/aem-guides-wknd/releases/latest)
+- AEM configured to run on HTTPS [https://experienceleague.adobe.com/en/docs/experience-manager-learn/foundation/security/use-the-ssl-wizard](https://experienceleague.adobe.com/en/docs/experience-manager-learn/foundation/security/use-the-ssl-wizard)
+- `Adobe Granite Token Authentication Handler` configured to set `token.samesite.cookie.attr=Partitioned`
+- Remove `X-FRAME-Options=SAMEORIGIN` from `Apache Sling Main Servlet`'s `sling.additional.response.headers` attribute if run locally
+- Add policy for `https://localhost:3000` to `Adobe Granite Cross-Origin Resource Sharing Policy`. The default `adobe` configuraiton can be used as blueprint if run local copy of the app
+- Follow configuration on [https://github.com/maximilianvoss/universal-editor-service-proxy](https://github.com/maximilianvoss/universal-editor-service-proxy) for local development set up
+- Open Universal Editor either 
+    - under AEM domain for AEMCS, e.g. [https://author-p7452-e12433.adobeaemcloud.com/ui#/aem/universal-editor/canvas/](https://author-p7452-e12433.adobeaemcloud.com/ui#/aem/universal-editor/canvas/) 
+    - or on [https://experience.adobe.com/#/aem/editor/canvas/](https://experience.adobe.com/#/aem/editor/canvas/)
+- For experience.adobe.com use the `Local Developer Login` to authenticate against your local AEM instance when using a local SDK or AEM 6.5
 
-The app will be available at `http://localhost:5173`
+## Available Scripts
 
-## 📦 Building for Production
+In the project directory, you can run:
 
-To create a production build:
+### `yarn start`
 
-```bash
-npm run build
-```
+Runs the app in the development mode.\
+Open [https://localhost:3000](https://localhost:3000) to view it in your browser.
 
-To preview the production build locally:
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-```bash
-npm run preview
-```
+### `yarn build`
 
-## 🌐 Deploying to GitHub Pages
+Builds the app for production to the `build` folder.
+Utilize a gulp task to bundle all the JS and CSS files in the static build folder into the single main `index.html` file.
+This is useful for having the `index.html` bundle file automatically deployed on `https://ue-remote-app.adobe.net` when pushing new changes on the `main` branch.
 
-### First-time Setup
+This command is executed automatically before each commit by the `pre-commit` script.
 
-1. **Update `vite.config.js`**: Change the `base` property to match your repository name:
-```javascript
-base: '/your-repo-name/',
-```
+## Automatic deployment flow
 
-2. **Initialize Git** (if not already done):
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-```
+The application uses the husky package (https://www.npmjs.com/package/husky), for adding a pre-commit script, located in the  `.husky` folder.
+The `pre-commit` script will be run before each commit. It will build the project and will add the build bundle from `build/index.html` to the commit.
+We expose this bundle to GitHub. This is happening due to the usage of internal artifactory packages (we cannot build the project on a deployment environment).
 
-3. **Create a GitHub repository** and push your code:
-```bash
-git remote add origin https://github.com/your-username/your-repo-name.git
-git branch -M main
-git push -u origin main
-```
+The flow is that we build the application locally and deploy the bundle through GitHub workflow to https://ue-remote-app.adobe.net, on each PR merged to the `main` branch.
 
-### Deploy
+## Manual deployments
 
-Run the deploy command:
 
-```bash
-npm run deploy
-```
+ ### Deploy commands
+Run in project root:
 
-This will:
-- Build your app
-- Create/update the `gh-pages` branch
-- Push the built files to GitHub Pages
+`npm run deploy` - deploy the app at any point to a non-production link, e.g https://62ff59a019923a6f7aec439d--prismatic-panda-c194c0.netlify.app/.
 
-### Enable GitHub Pages
-
-1. Go to your repository on GitHub
-2. Navigate to **Settings** > **Pages**
-3. Under "Source", select the `gh-pages` branch
-4. Click **Save**
-
-Your site will be available at: `https://your-username.github.io/your-repo-name/`
-
-## 🛠️ Tech Stack
-
-- **React 18** - UI library
-- **Vite** - Build tool and dev server
-- **gh-pages** - Deployment tool
-
-## 📝 Project Structure
-
-```
-github-pages/
-├── src/
-│   ├── App.jsx          # Main App component
-│   ├── App.css          # App styles
-│   ├── main.jsx         # React entry point
-│   └── index.css        # Global styles
-├── index.html           # HTML template
-├── vite.config.js       # Vite configuration
-├── package.json         # Dependencies and scripts
-└── README.md           # This file
-```
-
-## 🎨 Customization
-
-- Edit `src/App.jsx` to modify the main component
-- Update styles in `src/App.css` and `src/index.css`
-- Modify `index.html` to change the page title or meta tags
-- Add new components in the `src/` directory
-
-## 📚 Learn More
-
-- [React Documentation](https://react.dev)
-- [Vite Documentation](https://vitejs.dev)
-- [GitHub Pages Documentation](https://docs.github.com/en/pages)
-
-## 📄 License
-
-MIT License - feel free to use this project as you wish!
-
+`npm run deploy prod` - deploy the app to the production link https://ue-remote-app.adobe.net (this is usually not needed, the application is automatically deployed on every PR merged to the `main` branch).
+ 
